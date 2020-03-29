@@ -1,12 +1,12 @@
 import React from 'react';
-import initialState from '/Users/jax/Desktop/ant-demo/src/.umi/plugin-initial-state/models/initialState';
+import initialState from '/Users/Tassel/Desktop/Cootek/ant-demo/src/.umi/plugin-initial-state/models/initialState';
 
 // @ts-ignore
-import Dispatcher from '/Users/jax/Desktop/ant-demo/node_modules/@umijs/plugin-model/lib/helpers/dispatcher';
+import Dispatcher from '/Users/Tassel/Desktop/Cootek/ant-demo/node_modules/@umijs/plugin-model/lib/helpers/dispatcher';
 // @ts-ignore
-import Executor from '/Users/jax/Desktop/ant-demo/node_modules/@umijs/plugin-model/lib/helpers/executor';
+import Executor from '/Users/Tassel/Desktop/Cootek/ant-demo/node_modules/@umijs/plugin-model/lib/helpers/executor';
 // @ts-ignore
-import { UmiContext } from '/Users/jax/Desktop/ant-demo/node_modules/@umijs/plugin-model/lib/helpers/constant';
+import { UmiContext } from '/Users/Tassel/Desktop/Cootek/ant-demo/node_modules/@umijs/plugin-model/lib/helpers/constant';
 
 export const models = { '@@initialState': initialState,  };
 

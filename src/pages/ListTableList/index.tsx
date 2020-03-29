@@ -146,6 +146,7 @@ const TableList: React.FC<{}> = () => {
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="key"
+        search={false}
         onChange={(_, _filter, _sorter) => {
           const sorterResult = _sorter as SorterResult<TableListItem>;
           if (sorterResult.field) {

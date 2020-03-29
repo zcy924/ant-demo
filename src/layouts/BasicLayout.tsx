@@ -77,11 +77,11 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
    */
 
   useEffect(() => {
-    if (dispatch) {
-      dispatch({
-        type: 'user/fetchCurrent',
-      });
-    }
+    // if (dispatch) {
+    //   dispatch({
+    //     type: 'user/fetchCurrent',
+    //   });
+    // }
   }, []);
   /**
    * init variables

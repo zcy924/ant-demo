@@ -8,7 +8,7 @@
 export default {
   dev: {
     '/api/': {
-      target: 'http://localhost:3004/',
+      target: 'http://localhost:5000/',
       changeOrigin: true,
       pathRewrite: { '/api': '' },
     },
