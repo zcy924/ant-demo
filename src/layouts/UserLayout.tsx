@@ -19,6 +19,7 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
       routes: [],
     },
   } = props;
+  console.log('userlayout')
   const { routes = [] } = route;
   const {
     children,

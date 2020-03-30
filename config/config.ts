@@ -103,6 +103,12 @@ export default defineConfig({
               component: './ad_violation',
             },
             {
+              name: '查询表格',
+              icon: 'smile',
+              path: '/security_incidents',
+              component: './SecurityIncidents',
+            },
+            {
               component: './404',
             },
           ],

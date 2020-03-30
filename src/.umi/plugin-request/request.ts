@@ -1,5 +1,5 @@
 /**
- * Base on https://github.com/umijs//Users/Tassel/Desktop/Cootek/ant-demo/node_modules/umi-request
+ * Base on https://github.com/umijs//Users/jax/Desktop/ant-demo/node_modules/umi-request
  */
 import {
   extend,
@@ -12,14 +12,14 @@ import {
   RequestResponse,
   RequestInterceptor,
   ResponseInterceptor,
-} from '/Users/Tassel/Desktop/Cootek/ant-demo/node_modules/umi-request';
+} from '/Users/jax/Desktop/ant-demo/node_modules/umi-request';
 // @ts-ignore
 
 import { ApplyPluginsType } from 'umi';
 import { history, plugin } from '../core/umiExports';
             
 import { message, notification } from 'antd';
-import useUmiRequest from '/Users/Tassel/Desktop/Cootek/ant-demo/node_modules/@umijs/use-request';
+import useUmiRequest from '/Users/jax/Desktop/ant-demo/node_modules/@umijs/use-request';
 import {
   BaseOptions,
   BasePaginatedOptions,
@@ -35,7 +35,7 @@ import {
   PaginatedOptionsWithFormat,
   PaginatedParams,
   PaginatedResult,
-} from '/Users/Tassel/Desktop/Cootek/ant-demo/node_modules/@umijs/use-request/lib/types';
+} from '/Users/jax/Desktop/ant-demo/node_modules/@umijs/use-request/lib/types';
 
 type ResultWithData<T = any> = { data: T; [key: string]: any };
 

@@ -1,6 +1,6 @@
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import React, { useState, useEffect } from 'react';
-import { Spin } from 'antd';
+import {Col, Row, Spin} from 'antd';
 import styles from './index.less';
 
 export default () => {
@@ -12,9 +12,12 @@ export default () => {
   }, []);
   return (
     <PageHeaderWrapper>
-      <div style={{backgroundColor:'white'}}>
-      nihao
-      </div>
+        <div>
+            <Row>
+                <Col span={12}>haha</Col>
+                <Col span={12}>xixi</Col>
+            </Row>
+        </div>
     </PageHeaderWrapper>
   );
 };

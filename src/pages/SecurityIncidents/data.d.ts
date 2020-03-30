@@ -2,10 +2,11 @@ export interface TableListItem {
   key: number;
   date: string;
   desc: string;
-  package_names: string[],
+  package_names: string[];
   level: string;
   measure: string;
-  result: string
+  result: string;
+  _id:string;
 }
 
 export interface TableListPagination {

@@ -1,4 +1,4 @@
-import { createBrowserHistory } from '/Users/Tassel/Desktop/Cootek/ant-demo/node_modules/@umijs/runtime/dist/index.js';
+import { createBrowserHistory } from '/Users/jax/Desktop/ant-demo/node_modules/@umijs/runtime/dist/index.js';
 
 let options = {
   "basename": "/"

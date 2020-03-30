@@ -43,6 +43,7 @@ const Login: React.FC<LoginProps> = (props) => {
         // return null;
     };
     useEffect(() => {
+        console.log('index')
         localStorage.setItem("firstLogin", 'true');
         const code = getQueryString('code');
         code && handleSubmit({

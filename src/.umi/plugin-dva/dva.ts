@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { ApplyPluginsType } from 'umi';
 import dva from 'dva';
 // @ts-ignore
-import createLoading from '/Users/Tassel/Desktop/Cootek/ant-demo/node_modules/dva-loading/dist/index.esm.js';
+import createLoading from '/Users/jax/Desktop/ant-demo/node_modules/dva-loading/dist/index.esm.js';
 import { plugin, history } from '../core/umiExports';
 
 let app:any = null;
@@ -26,10 +26,10 @@ function _onCreate() {
   (runtimeDva.plugins || []).forEach((plugin:any) => {
     app.use(plugin);
   });
-  app.model({ namespace: 'global', ...(require('/Users/Tassel/Desktop/Cootek/ant-demo/src/models/global.ts').default) });
-app.model({ namespace: 'login', ...(require('/Users/Tassel/Desktop/Cootek/ant-demo/src/models/login.ts').default) });
-app.model({ namespace: 'setting', ...(require('/Users/Tassel/Desktop/Cootek/ant-demo/src/models/setting.ts').default) });
-app.model({ namespace: 'user', ...(require('/Users/Tassel/Desktop/Cootek/ant-demo/src/models/user.ts').default) });
+  app.model({ namespace: 'global', ...(require('/Users/jax/Desktop/ant-demo/src/models/global.ts').default) });
+app.model({ namespace: 'login', ...(require('/Users/jax/Desktop/ant-demo/src/models/login.ts').default) });
+app.model({ namespace: 'setting', ...(require('/Users/jax/Desktop/ant-demo/src/models/setting.ts').default) });
+app.model({ namespace: 'user', ...(require('/Users/jax/Desktop/ant-demo/src/models/user.ts').default) });
   return app;
 }
 
