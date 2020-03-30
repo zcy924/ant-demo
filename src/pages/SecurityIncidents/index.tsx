@@ -69,7 +69,7 @@ const handleRemove = async (id: string) => {
     }
 };
 
-const TableList: React.FC<{}> = () => {
+const SecurityIncidents: React.FC<{}> = () => {
     const [createModalVisible, handleModalVisible] = useState<boolean>(false);
     const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
     const [stepFormValues, setStepFormValues] = useState({});
@@ -135,7 +135,7 @@ const TableList: React.FC<{}> = () => {
     return (
         <PageHeaderWrapper>
             <ProTable<TableListItem>
-                headerTitle="查询表格"
+                headerTitle="Security Incidents Records"
                 actionRef={actionRef}
                 dateFormatter={'string'}
                 rowKey="_id"
@@ -207,4 +207,4 @@ const TableList: React.FC<{}> = () => {
     );
 };
 
-export default TableList;
+export default SecurityIncidents;

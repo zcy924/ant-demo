@@ -97,16 +97,23 @@ export default defineConfig({
               component: './gp_violation',
             },
             {
-              name: '空白页面',
+              name: 'Advertisement',
               icon: 'smile',
               path: '/ad_violation',
               component: './ad_violation',
             },
             {
-              name: '查询表格',
+              name: 'Security Incidents',
               icon: 'smile',
               path: '/security_incidents',
               component: './SecurityIncidents',
+            },
+            {
+              name: 'Edit Addviolation',
+              path: '/ad_violation/edit',
+              exact: true,
+              component:'./ad_violation/components/AddViolation',
+              hideInMenu: true
             },
             {
               component: './404',

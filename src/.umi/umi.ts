@@ -2,8 +2,8 @@ import './core/polyfill';
 import '../global.tsx';
 import { plugin } from './core/plugin';
 import { createHistory } from './core/history';
-import { ApplyPluginsType } from '/Users/jax/Desktop/ant-demo/node_modules/@umijs/runtime/dist/index.js';
-import { renderClient } from '/Users/jax/Desktop/ant-demo/node_modules/@umijs/renderer-react/dist/index.js';
+import { ApplyPluginsType } from '/Users/Tassel/Desktop/Cootek/ant-demo/node_modules/@umijs/runtime/dist/index.js';
+import { renderClient } from '/Users/Tassel/Desktop/Cootek/ant-demo/node_modules/@umijs/renderer-react/dist/index.js';
 
 
 require('../global.less');
@@ -11,7 +11,7 @@ require('./plugin-locale/locale')._onCreate();
 
 (() => {
   // Runtime block add component
-  window.GUmiUIFlag = require('/Users/jax/Desktop/ant-demo/node_modules/@umijs/plugin-ui-blocks/lib/sdk/flagBabelPlugin/GUmiUIFlag.js').default;
+  window.GUmiUIFlag = require('/Users/Tassel/Desktop/Cootek/ant-demo/node_modules/@umijs/plugin-ui-blocks/lib/sdk/flagBabelPlugin/GUmiUIFlag.js').default;
 
   // Enable/Disable block add edit mode
   window.addEventListener('message', (event) => {
@@ -73,9 +73,9 @@ export default clientRender();
         if (isIE) return;
 
         // Umi UI Bubble
-        require('/Users/jax/Desktop/ant-demo/node_modules/@umijs/preset-ui/lib/bubble').default({
+        require('/Users/Tassel/Desktop/Cootek/ant-demo/node_modules/@umijs/preset-ui/lib/bubble').default({
           port: 3000,
-          path: '/Users/jax/Desktop/ant-demo',
+          path: '/Users/Tassel/Desktop/Cootek/ant-demo',
           currentProject: '',
           isBigfish: undefined,
         });

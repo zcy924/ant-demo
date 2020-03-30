@@ -1,12 +1,4 @@
 import request from "@/utils/request";
-// function changeData(data) {
-//     return {
-//         data:data['ret_data'],
-//         total
-//     }
-//
-// }
-
 export interface ParamsType {
     current: number;
     pageSize: number;
@@ -28,6 +20,5 @@ export async function modSecurityIncident(params:any) {
 
 export async function delSecurityIncident(id:string) {
     return request.delete(`/security_incident/${id}`)
-
 }
 
