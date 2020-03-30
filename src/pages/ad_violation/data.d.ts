@@ -3,6 +3,7 @@ export interface Product {
   owner: string;
   package_name: string;
   state: number;
+  _id?:string;
 }
 export interface Mail {
   content: string;

@@ -158,7 +158,7 @@ const Adviolation: React.FC<{}> = () => {
                 tableAlertRender={false}
                 request={(params: any) => queryAdviolations(params)}
                 columns={columns}
-                rowSelection={{}}
+                // rowSelection={{}}
             />
             <CreateForm
                 onSubmit={async value => {
