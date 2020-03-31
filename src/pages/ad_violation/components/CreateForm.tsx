@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import {Button, Col, DatePicker, Form, Input, Modal, Row, Select} from 'antd';
-import TextArea from "antd/es/input/TextArea";
+import {Button, Form, Input, Modal, Select} from 'antd';
 import moment from "moment";
 import ProductsTable from "@/pages/ad_violation/components/ProductsTable";
+import AddProduct from "@/pages/ad_violation/components/AddProduct";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -38,8 +38,11 @@ interface CreateFormProps {
 const CreateForm: React.FC<CreateFormProps> = props => {
     const [form] = Form.useForm();
     const [expandProducts, setExpandProducts] = useState(false);
-
+    const [productModal, setProductModal] = useState(false);
     const {modalVisible, onSubmit: handleAdd, onCancel} = props;
+    const addProduct = (params) => {
+        return true
+    };
     const okHandle = async () => {
         const fieldsValue = await form.validateFields();
         fieldsValue.date = moment(fieldsValue.data).format('YYYY-MM-DD');
@@ -61,14 +64,14 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                 <FormItem
                     label="广告平台"
                     name="platform"
-                    rules={[{required: true, message: '请选择日期！'}]}
+                    rules={[{required: true, message: '广告平台不可以为空！'}]}
                 >
                     <Input placeholder={'请输入广告平台!'}/>
                 </FormItem>
                 <FormItem
                     label="广告账户"
                     name="account"
-                    rules={[{required: true, message: '请至少选择一个包名'}]}
+                    rules={[{required: true, message: '广告账户不可以为空!'}]}
                 >
                     <Input placeholder={'请输入广告账户!'}/>
                 </FormItem>
@@ -100,10 +103,11 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                 >
                     <div>
                         <div>
-                            <Button size='small' onClick={() => {
+                            <Button onClick={() => {
                                 setExpandProducts(!expandProducts)
                             }}>{expandProducts ? '收起' : '展开'}</Button>
-                            <Button size='small' type='primary' style={{marginLeft: '16px'}}>新增</Button>
+                            <Button type='primary' style={{marginLeft: '16px'}}
+                                    onClick={() => setProductModal(true)}>新增产品</Button>
                         </div>
                         {
                             expandProducts ? <div style={{marginTop: '8px'}}>
@@ -112,7 +116,30 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                         }
                     </div>
                 </FormItem>
+                <FormItem
+                    label="违规记录"
+                    name="violation_records"
+                >
+                    <div>
+                        <div>
+                            <Input placeholder="输入关键字过滤(包名，违规内容)" style={{width:'40%'}}/>
+                            <Button type="primary" style={{marginLeft:'16px'}}>新增违规记录</Button>
+                        </div>
+                        {
+                            expandProducts ? <div style={{marginTop: '8px'}}>
+                                <ProductsTable/>
+                            </div> : null
+                        }
+                    </div>
+
+                </FormItem>
             </Form>
+            <AddProduct modalVisible={productModal} onSubmit={async () => {
+                addProduct('a');
+                setProductModal(false);
+            }} onCancel={() => {
+                setProductModal(false)
+            }}/>
         </Modal>
     );
 };

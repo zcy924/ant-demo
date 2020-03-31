@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {Form, Input, Select} from "antd";
 import TextArea from "antd/es/input/TextArea";
 
@@ -29,6 +29,7 @@ const states = [
 
 const AddViolation: React.FC = props => {
     const [form] = Form.useForm();
+
     return (
         <div style={{backgroundColor: 'white', padding: '16px'}}>
             <Form form={form}
