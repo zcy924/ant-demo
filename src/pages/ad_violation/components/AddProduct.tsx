@@ -35,6 +35,7 @@ const AddProduct: React.FC<AddProductProps> = props => {
     return (
         <Modal
             destroyOnClose
+            width={'40%'}
             visible={modalVisible}
             onOk={() => handleAdd()}
             onCancel={() => onCancel()}

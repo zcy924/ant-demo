@@ -3,6 +3,10 @@ import {Button, Form, Input, Modal, Select} from 'antd';
 import moment from "moment";
 import ProductsTable from "@/pages/ad_violation/components/ProductsTable";
 import AddProduct from "@/pages/ad_violation/components/AddProduct";
+import ViolationRecordsTable from "@/pages/ad_violation/components/ViolationRecordsTable";
+import AddViolation from "@/pages/ad_violation/components/AddViolation";
+import EmailTable from "@/pages/ad_violation/components/EmailTable";
+import AddMail from "@/pages/ad_violation/components/AddMail";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -39,6 +43,8 @@ const CreateForm: React.FC<CreateFormProps> = props => {
     const [form] = Form.useForm();
     const [expandProducts, setExpandProducts] = useState(false);
     const [productModal, setProductModal] = useState(false);
+    const [violationModal, setViolationModal] = useState(false);
+    const [mailModal, setMailModal] = useState(false);
     const {modalVisible, onSubmit: handleAdd, onCancel} = props;
     const addProduct = (params) => {
         return true
@@ -122,17 +128,32 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                 >
                     <div>
                         <div>
-                            <Input placeholder="输入关键字过滤(包名，违规内容)" style={{width:'40%'}}/>
-                            <Button type="primary" style={{marginLeft:'16px'}}>新增违规记录</Button>
+                            <Input placeholder="输入关键字过滤(包名，违规内容)" style={{width: '40%'}}/>
+                            <Button type="primary" style={{marginLeft: '16px'}}
+                                    onClick={() => setViolationModal(true)}>新增违规记录</Button>
                         </div>
-                        {
-                            expandProducts ? <div style={{marginTop: '8px'}}>
-                                <ProductsTable/>
-                            </div> : null
-                        }
+                        <div style={{marginTop: '8px'}}>
+                            <ViolationRecordsTable/>
+                        </div>
+                    </div>
+                </FormItem>
+
+                <FormItem
+                    label="邮件信息"
+                    name="violation_records"
+                >
+                    <div>
+                        <div>
+                            <Button type="primary"
+                                    onClick={() => setMailModal(true)}>新增邮件</Button>
+                        </div>
+                        <div style={{marginTop: '8px'}}>
+                            <EmailTable/>
+                        </div>
                     </div>
 
                 </FormItem>
+
             </Form>
             <AddProduct modalVisible={productModal} onSubmit={async () => {
                 addProduct('a');
@@ -140,6 +161,12 @@ const CreateForm: React.FC<CreateFormProps> = props => {
             }} onCancel={() => {
                 setProductModal(false)
             }}/>
+            <AddViolation modalVisible={violationModal} onSubmit={async () => {
+                setViolationModal(false)
+            }} onCancel={() => setViolationModal(false)}/>
+            <AddMail modalVisible={mailModal} onSubmit={async () => {
+                setMailModal(false)
+            }} onCancel={() => setMailModal(false)}/>
         </Modal>
     );
 };
