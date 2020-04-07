@@ -2,6 +2,9 @@ import React from "react";
 import {Button, DatePicker, Form, Input, Modal, Select, Switch, Upload} from "antd";
 import TextArea from "antd/es/input/TextArea";
 import {UploadOutlined} from "@ant-design/icons/lib";
+import moment from "moment";
+import {ViolationRecord} from "@/pages/ad_violation/data";
+import {guid} from "@/utils/utils";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -26,28 +29,41 @@ const states = [
 
 export interface ViolationRecordsProps {
     modalVisible: boolean;
-    onSubmit: (params: { [key: string]: any }) => void;
+    onSubmit: (params: ViolationRecord) => void;
     onCancel: () => void
+    initValue: ViolationRecord
 }
 
 const AddViolation: React.FC<ViolationRecordsProps> = props => {
     const [form] = Form.useForm();
-    const {modalVisible, onSubmit, onCancel} = props;
+    const {modalVisible, onSubmit, onCancel, initValue} = props;
     const handleAdd = async () => {
-        const params = await form.validateFields();
+        const params: any = await form.validateFields();
+        params.time = moment(params.time).format('YYYY-MM-DD');
+        params.deadline = moment(params.deadline).format('YYYY-MM-DD');
+        params['id'] = initValue ? initValue['id'] : guid();
         form.resetFields();
         onSubmit(params);
-    }
+    };
     return (
         <Modal
             destroyOnClose
             visible={modalVisible}
             width={'40%'}
             onOk={() => handleAdd()}
-            onCancel={() => onCancel()}
+            onCancel={() => {
+                onCancel()
+            }}
             title={"新增违规记录"}
         >
             <Form form={form}
+                  initialValues={
+                      {
+                          ...initValue,
+                          time: initValue ? moment(initValue.time) : '',
+                          deadline: initValue ? moment(initValue.deadline) : ''
+                      }
+                  }
                   {...formLayout}
             >
                 <FormItem
@@ -70,55 +86,64 @@ const AddViolation: React.FC<ViolationRecordsProps> = props => {
                     label="牵涉包名"
                     name="package_names"
                 >
-                    <Input placeholder={'请输入包名!'}/>
+                    <Select mode="tags" style={{width: '100%'}} placeholder="请输入牵涉包名!">
+                    </Select>
+                </FormItem>
+
+                <FormItem
+                    label="处理人"
+                    name="owner"
+                >
+                    <Select mode="tags" placeholder="请输入负责人名称!">
+                    </Select>
                 </FormItem>
 
                 <FormItem
                     label="负责人类型"
                     name="owner_type"
                 >
-                    <Select>
+                    <Select placeholder={'请选择负责人类型!'}>
                         {
                             ['产品PM', '运营PM', 'MZM', 'Dev'].map(item => (
-                                <Option value={item}>{item}</Option>
+                                <Option key={item} value={item}>{item}</Option>
                             ))
                         }
                     </Select>
                 </FormItem>
 
                 <FormItem
-                    label="处理发布状态"
+                    label="处理或发布状态"
                     name="status"
                 >
-                    <Input placeholder={'请输入包名!'}/>
+                    <Input placeholder={'请输入处理或发布状态!'}/>
                 </FormItem>
 
                 <FormItem
                     label="违规内容"
                     name="content"
                 >
-                    <TextArea rows={2}/>
+                    <TextArea rows={2} placeholder={'请填写违规内容!'}/>
                 </FormItem>
 
                 <FormItem
                     label="描述文件"
-                    name="file_url"
+                    // name="file_url"
                 >
                     <Upload>
                         <Button>
-                            <UploadOutlined/> Click to Upload
+                            <UploadOutlined/> 点击上传
                         </Button>
                     </Upload>
                 </FormItem>
 
                 <FormItem
-                    label="请选择账号状态"
+                    label="违规等级"
                     name="level"
                 >
-                    <Select>
+                    <Select placeholder={'请选择违规等级'}>
                         {
                             states.map(item => (
-                                <Option value={item.value}>{item.label}</Option>
+                                <Option key={item.value} value={item.value}>{item.label}</Option>
                             ))
                         }
                     </Select>
@@ -126,11 +151,11 @@ const AddViolation: React.FC<ViolationRecordsProps> = props => {
 
                 <FormItem
                     label="措施描述文件"
-                    name="solve_file_url"
+                    // name="solve_file_url"
                 >
                     <Upload>
                         <Button>
-                            <UploadOutlined/> Click to Upload
+                            <UploadOutlined/> 点击上传
                         </Button>
                     </Upload>
                 </FormItem>
@@ -139,28 +164,30 @@ const AddViolation: React.FC<ViolationRecordsProps> = props => {
                     label="采取措施"
                     name="measure"
                 >
-                    <TextArea rows={2}/>
+                    <TextArea rows={2} placeholder={'请填写采取措施!'}/>
                 </FormItem>
 
                 <FormItem
                     label="最终结果"
                     name="results"
                 >
-                    <TextArea rows={2}/>
+                    <TextArea rows={2} placeholder={'请填写最终结果!'}/>
                 </FormItem>
 
                 <FormItem
                     label="是否跟踪"
                     name="need_alarm"
+                    valuePropName="checked"
                 >
-                    <Switch />
+                    <Switch/>
                 </FormItem>
 
                 <FormItem
                     label="已结束"
                     name="finished"
+                    valuePropName="checked"
                 >
-                    <Switch />
+                    <Switch/>
                 </FormItem>
 
                 <FormItem
@@ -175,25 +202,27 @@ const AddViolation: React.FC<ViolationRecordsProps> = props => {
                     label="报警邮箱"
                     name="alarm_emails"
                 >
-                    <Input />
+                    <Select mode="tags" placeholder="请添加报警邮箱!">
+                    </Select>
                 </FormItem>
 
                 <FormItem
                     label="报警内容"
                     name="alarm_content"
                 >
-                    <TextArea rows={2}/>
+                    <TextArea rows={2} placeholder='请输入报警内容!'/>
                 </FormItem>
 
                 <FormItem
                     label="有关邮件"
                     name="associate_email"
                 >
-                    <Input />
+                    <Select mode="tags" placeholder="请添加有关邮件!">
+                    </Select>
                 </FormItem>
 
             </Form>
         </Modal>
     )
-}
+};
 export default AddViolation

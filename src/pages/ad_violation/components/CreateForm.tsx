@@ -1,19 +1,19 @@
 import React, {useState} from 'react';
 import {Button, Form, Input, Modal, Select} from 'antd';
-import moment from "moment";
 import ProductsTable from "@/pages/ad_violation/components/ProductsTable";
 import AddProduct from "@/pages/ad_violation/components/AddProduct";
 import ViolationRecordsTable from "@/pages/ad_violation/components/ViolationRecordsTable";
 import AddViolation from "@/pages/ad_violation/components/AddViolation";
 import EmailTable from "@/pages/ad_violation/components/EmailTable";
 import AddMail from "@/pages/ad_violation/components/AddMail";
+import {Mail, Product, ViolationRecord} from "@/pages/ad_violation/data";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const formLayout = {
     labelCol: {span: 3},
     wrapperCol: {span: 19},
-}
+};
 const states = [
     {
         value: 0,
@@ -45,14 +45,85 @@ const CreateForm: React.FC<CreateFormProps> = props => {
     const [productModal, setProductModal] = useState(false);
     const [violationModal, setViolationModal] = useState(false);
     const [mailModal, setMailModal] = useState(false);
+    const [productTableData, setProductTableData] = useState<Product[]>([]);
+    const [violationTableData, setViolationTableData] = useState<ViolationRecord[]>([]);
+    const [mailTableData, setMailTableData] = useState<Mail[]>([]);
     const {modalVisible, onSubmit: handleAdd, onCancel} = props;
-    const addProduct = (params) => {
-        return true
+
+    const [modProductInfo, setModProductInfo] = useState();
+    const [modViolationInfo, setModlViolationInfo] = useState();
+    const [modEmailInfo, setModEmailInfo] = useState();
+    const addProduct = (params: Product) => {
+        // 判断列表中是否已存在相同id，存在则替换item，不存在则增加item
+        let flag = true;
+        productTableData.forEach((item, index) => {
+            if (params['id'] === item['id']) {
+                productTableData[index] = params;
+                setProductTableData([...productTableData]);
+                flag = false
+            }
+        });
+        flag && setProductTableData([...productTableData, params]);
+
+
     };
+    const delProduct = (id: string) => {
+        setProductTableData([...productTableData.filter(item => item['id'] !== id)])
+    };
+
+    const modProduct = (id: string) => {
+        const [tempData] = productTableData.filter(item => item['id'] === id);
+        setModProductInfo(tempData);
+        setProductModal(true);
+    };
+
+    const addViolationRecord = (params: ViolationRecord) => {
+        let flag = true;
+        violationTableData.forEach((item, index) => {
+            if (params['id'] === item['id']) {
+                violationTableData[index] = params;
+                setViolationTableData([...violationTableData]);
+                flag = false
+            }
+        });
+        flag && setViolationTableData([...violationTableData, params]);
+    };
+    const modViolation = (id: string) => {
+        const [tempData] = violationTableData.filter(item => item['id'] === id);
+        setModlViolationInfo(tempData);
+        setViolationModal(true);
+    };
+    const delViolation = (id: string) => {
+        setViolationTableData([...violationTableData.filter(item => item['id'] !== id)])
+    };
+
+    const addMail = (params: Mail) => {
+        let flag = true;
+        mailTableData.forEach((item, index) => {
+            if (params['id'] === item['id']) {
+                mailTableData[index] = params;
+                setMailTableData([...mailTableData]);
+                flag = false
+            }
+        });
+        flag && setMailTableData([...mailTableData, params]);
+    };
+    const delMail = (id: string) => {
+        setMailTableData([...mailTableData.filter(item => item['id'] !== id)]);
+    };
+    const modMail = (id: string) => {
+        const [tempData] = mailTableData.filter(item => item['id'] === id);
+        setModEmailInfo(tempData);
+        setMailModal(true);
+    };
+
     const okHandle = async () => {
         const fieldsValue = await form.validateFields();
-        fieldsValue.date = moment(fieldsValue.data).format('YYYY-MM-DD');
-        form.resetFields();
+        // form.resetFields();
+        fieldsValue.products = productTableData.map(item => delete item['id']);
+        fieldsValue.violation_records = violationTableData.map(item => delete item['id']);
+        fieldsValue.source_emails = mailTableData;
+        console.log(fieldsValue);
         handleAdd(fieldsValue);
     };
     return (
@@ -63,6 +134,9 @@ const CreateForm: React.FC<CreateFormProps> = props => {
             visible={modalVisible}
             onOk={okHandle}
             onCancel={() => onCancel()}
+            afterClose={() => {
+                form.resetFields([])
+            }}
         >
             <Form form={form}
                   {...formLayout}
@@ -117,7 +191,11 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                         </div>
                         {
                             expandProducts ? <div style={{marginTop: '8px'}}>
-                                <ProductsTable/>
+                                <ProductsTable dataSource={productTableData} del={(id: string) => {
+                                    delProduct(id)
+                                }} mod={(id) => {
+                                    modProduct(id)
+                                }}/>
                             </div> : null
                         }
                     </div>
@@ -133,14 +211,17 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                                     onClick={() => setViolationModal(true)}>新增违规记录</Button>
                         </div>
                         <div style={{marginTop: '8px'}}>
-                            <ViolationRecordsTable/>
+                            <ViolationRecordsTable dataSource={violationTableData}
+                                                   del={(id: string) => delViolation(id)} mod={(id: string) => {
+                                modViolation(id)
+                            }}/>
                         </div>
                     </div>
                 </FormItem>
 
                 <FormItem
                     label="邮件信息"
-                    name="violation_records"
+                    name="source_emails"
                 >
                     <div>
                         <div>
@@ -148,25 +229,48 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                                     onClick={() => setMailModal(true)}>新增邮件</Button>
                         </div>
                         <div style={{marginTop: '8px'}}>
-                            <EmailTable/>
+                            <EmailTable dataSource={mailTableData} del={id => delMail(id)} mod={id => modMail(id)}/>
                         </div>
                     </div>
-
                 </FormItem>
-
             </Form>
-            <AddProduct modalVisible={productModal} onSubmit={async () => {
-                addProduct('a');
-                setProductModal(false);
-            }} onCancel={() => {
-                setProductModal(false)
-            }}/>
-            <AddViolation modalVisible={violationModal} onSubmit={async () => {
-                setViolationModal(false)
-            }} onCancel={() => setViolationModal(false)}/>
-            <AddMail modalVisible={mailModal} onSubmit={async () => {
-                setMailModal(false)
-            }} onCancel={() => setMailModal(false)}/>
+
+            {
+                productModal && <AddProduct modalVisible={productModal}
+                                            initValue={modProductInfo} onSubmit={(params: Product) => {
+                    addProduct(params);
+                    setModProductInfo(null);
+                    setProductModal(false);
+                }} onCancel={() => {
+                    setModProductInfo(null);
+                    setProductModal(false);
+                }}/>
+            }
+
+            {
+                violationModal && <AddViolation modalVisible={violationModal} initValue={modViolationInfo}
+                                                onSubmit={(params: ViolationRecord) => {
+                                                    addViolationRecord(params);
+                                                    setModlViolationInfo(null);
+                                                    setViolationModal(false)
+                                                }} onCancel={() => {
+                    setModlViolationInfo(null);
+                    setViolationModal(false)
+                }}/>
+            }
+
+
+            {
+                mailModal && <AddMail modalVisible={mailModal} initValue={modEmailInfo} onSubmit={(params: Mail) => {
+                    addMail(params);
+                    setModEmailInfo(null);
+                    setMailModal(false);
+                }} onCancel={() => {
+                    setModEmailInfo(null);
+                    setMailModal(false);
+                }}/>
+            }
+
         </Modal>
     );
 };

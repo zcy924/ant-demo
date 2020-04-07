@@ -1,5 +1,5 @@
 import {DownOutlined, PlusOutlined} from '@ant-design/icons';
-import {Button, Divider, Dropdown, Menu, message} from 'antd';
+import {Button, Dropdown, Menu, message} from 'antd';
 import React, {useState, useRef} from 'react';
 import {PageHeaderWrapper} from '@ant-design/pro-layout';
 import ProTable, {ProColumns, ActionType} from '@ant-design/pro-table';
@@ -162,8 +162,8 @@ const Adviolation: React.FC<{}> = () => {
             />
             <CreateForm
                 onSubmit={async value => {
-                    const success = await handleAdd(value);
-                    if (success) {
+                    const response = await handleAdd(value);
+                    if (response?.['code'] == 200) {
                         handleModalVisible(false);
                         if (actionRef.current) {
                             actionRef.current.reload();

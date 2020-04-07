@@ -90,7 +90,7 @@ const SecurityIncidents: React.FC<{}> = () => {
             title: 'level',
             dataIndex: 'level',
             valueEnum: {
-                0: {text: '轻微', status: 'Default'},
+                0: {text: '轻微', status: 'Success'},
                 1: {text: '中等', status: 'Warning'},
                 2: {text: '严重', status: 'Error'},
             },

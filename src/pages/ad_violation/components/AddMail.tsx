@@ -1,6 +1,8 @@
 import React from "react";
-import {Form, Input, Modal, Select} from "antd";
+import {Form, Input, Modal} from "antd";
 import TextArea from "antd/es/input/TextArea";
+import {Mail} from "@/pages/ad_violation/data";
+import {guid} from "@/utils/utils";
 
 const FormItem = Form.Item;
 const formLayout = {
@@ -10,16 +12,18 @@ const formLayout = {
 
 export interface AddMailProps {
     modalVisible: boolean;
-    onSubmit: (params: { [key: string]: any }) => void;
-    onCancel: () => void
+    onSubmit: (params: Mail) => void;
+    onCancel: () => void;
+    initValue: Mail;
 }
 
 const AddMail: React.FC<AddMailProps> = props => {
     const [form] = Form.useForm();
-    const {modalVisible, onSubmit, onCancel} = props;
+    const {modalVisible, onSubmit, onCancel, initValue} = props;
     const handleAdd = async () => {
-        const params = await form.validateFields();
+        const params = await form.validateFields() as Mail;
         form.resetFields();
+        params['id'] = initValue ? initValue['id'] : guid();
         onSubmit(params);
     }
     return (
@@ -33,6 +37,9 @@ const AddMail: React.FC<AddMailProps> = props => {
         >
             <Form form={form}
                   {...formLayout}
+                  initialValues={
+                      initValue
+                  }
             >
                 <FormItem
                     label="标题或简述"
@@ -45,7 +52,7 @@ const AddMail: React.FC<AddMailProps> = props => {
                     label="内容"
                     name="content"
                 >
-                    <TextArea rows={8} placeholder={'请输入内容'} />
+                    <TextArea rows={8} placeholder={'请输入内容'}/>
                 </FormItem>
             </Form>
         </Modal>

@@ -1,5 +1,7 @@
 import React from "react";
 import {Form, Input, Modal, Select} from "antd";
+import {Product} from "@/pages/ad_violation/data";
+import {guid} from "@/utils/utils";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -20,29 +22,34 @@ const states = [
 
 export interface AddProductProps {
     modalVisible: boolean;
-    onSubmit: (params: { [key: string]: any }) => void;
+    onSubmit: (params: Product) => void;
     onCancel: () => void
+    initValue: Product | undefined,
 }
 
 const AddProduct: React.FC<AddProductProps> = props => {
     const [form] = Form.useForm();
-    const {modalVisible, onSubmit, onCancel} = props;
+    const {modalVisible, onSubmit, onCancel, initValue} = props;
     const handleAdd = async () => {
-        const params = await form.validateFields();
-        form.resetFields();
+        const params: any = await form.validateFields();
+        params['id'] = initValue ? initValue['id'] : guid();
         onSubmit(params);
-    }
+    };
     return (
         <Modal
             destroyOnClose
             width={'40%'}
             visible={modalVisible}
+            key="id"
             onOk={() => handleAdd()}
-            onCancel={() => onCancel()}
+            onCancel={() => {
+                onCancel()
+            }}
             title={"新增产品"}
         >
             <Form form={form}
                   {...formLayout}
+                  initialValues={initValue}
             >
                 <FormItem
                     label="App Name"
@@ -71,7 +78,7 @@ const AddProduct: React.FC<AddProductProps> = props => {
                     <Select>
                         {
                             states.map(item => (
-                                <Option value={item.value}>{item.label}</Option>
+                                <Option key={item.value} value={item.value}>{item.label}</Option>
                             ))
                         }
                     </Select>
@@ -80,5 +87,5 @@ const AddProduct: React.FC<AddProductProps> = props => {
             </Form>
         </Modal>
     )
-}
+};
 export default AddProduct

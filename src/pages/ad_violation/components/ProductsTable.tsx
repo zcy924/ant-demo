@@ -1,22 +1,16 @@
 import React from "react";
 import ProTable, {ProColumns} from "@ant-design/pro-table";
-import {Product, TableListItem} from "@/pages/ad_violation/data";
-import {Button, Dropdown, Menu} from "antd";
-import {queryAdviolations} from "@/services/advertisement";
+import {Product} from "@/pages/ad_violation/data";
+import {Divider} from "antd";
 
 export interface ProductsTableProps {
-
+    dataSource: Product[]
+    del: (id: string) => void
+    mod: (id: string) => void
 }
 
-const ProductsTable: React.FC = props => {
-    const data: Product[] = [{
-        _id: '1das',
-        app_name: 'sdasd',
-        package_name: 'dada',
-        owner: 'asdadad',
-        state: 1
-    }]
-
+const ProductsTable: React.FC<ProductsTableProps> = props => {
+    const {dataSource, del, mod} = props;
     const columns: ProColumns<Product>[] = [
         {
             title: 'app名称',
@@ -37,6 +31,17 @@ const ProductsTable: React.FC = props => {
                 0: {text: '正常', status: 'Success'},
                 1: {text: '下架', status: 'Error'},
             },
+        },
+        {
+            title: '操作',
+            width: 150,
+            render: (_, record) => (
+                <>
+                    <a onClick={() => mod(record['id'])}>编辑</a>
+                    <Divider type='vertical'/>
+                    <a onClick={() => del(record['id'])}>删除</a>
+                </>
+            )
         }
 
     ];
@@ -44,13 +49,13 @@ const ProductsTable: React.FC = props => {
         <ProTable<Product>
             search={false}
             toolBarRender={false}
-            rowKey="_id"
+            rowKey="id"
             tableAlertRender={false}
-            dataSource={data}
+            dataSource={dataSource}
             columns={columns}
             bordered
             size='small'
-            pagination = {false}
+            pagination={false}
         />
     )
 };

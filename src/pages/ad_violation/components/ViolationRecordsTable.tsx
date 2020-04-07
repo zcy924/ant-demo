@@ -1,37 +1,41 @@
 import React from "react";
 import ProTable, {ProColumns} from "@ant-design/pro-table";
 import {ViolationRecord} from "@/pages/ad_violation/data";
+import {Divider} from "antd";
 
 export interface ProductsTableProps {
-
+    dataSource: ViolationRecord[]
+    del: (id: string) => void
+    mod: (id: string) => void
 }
 
-const ViolationRecordsTable: React.FC = props => {
-    const data: ViolationRecord[] = [{
-        _id: '1das',
-        alarm_content: 'string',
-        alarm_emails: ['any[]'],
-        associate_email: ['string[]'],
-        content: 'sasdad',
-        deadline: 'string',
-        finished: true,
-        level: 1,
-        measure: 'string',
-        need_alarm: false,
-        owner: ['string[]'],
-        owner_type: 'string;',
-        package_names: ['.dsadada'],
-        solve_file_url: 'string;',
-        file_url: 'string;',
-        results: ',sadadad',
-        status: 'string;',
-        time: 'string;'
-    }];
+const ViolationRecordsTable: React.FC<ProductsTableProps> = props => {
+    // const data: ViolationRecord[] = [{
+    //     _id: '1das',
+    //     alarm_content: 'string',
+    //     alarm_emails: ['any[]'],
+    //     associate_email: ['string[]'],
+    //     content: 'sasdad',
+    //     deadline: 'string',
+    //     finished: true,
+    //     level: 1,
+    //     measure: 'string',
+    //     need_alarm: false,
+    //     owner: ['string[]'],
+    //     owner_type: 'string;',
+    //     package_names: ['.dsadada'],
+    //     solve_file_url: 'string;',
+    //     file_url: 'string;',
+    //     results: ',sadadad',
+    //     status: 'string;',
+    //     time: 'string;'
+    // }];
+    const {dataSource, del, mod} = props;
 
     const columns: ProColumns<ViolationRecord>[] = [
         {
             title: '时间',
-            dataIndex: 'app_name',
+            dataIndex: 'time',
         },
         {
             title: '违规类型',
@@ -46,16 +50,12 @@ const ViolationRecordsTable: React.FC = props => {
             dataIndex: 'owner',
         },
         {
-            title: '责任人',
-            dataIndex: 'owner'
+            title: '负责人类型',
+            dataIndex: 'owner_type'
         },
         {
-            title: '状态',
-            dataIndex: 'state',
-            valueEnum: {
-                0: {text: '正常', status: 'Success'},
-                1: {text: '下架', status: 'Error'},
-            },
+            title: '发布或处理状态',
+            dataIndex: 'status',
         },
         {
             title: '违规内容',
@@ -89,10 +89,16 @@ const ViolationRecordsTable: React.FC = props => {
         {
             title: '是否跟踪',
             dataIndex: 'need_alarm',
+            render: (_, record) => (
+                record['need_alarm'] ? '是' : '否'
+            )
         },
         {
             title: '是否结束',
             dataIndex: 'finished',
+            render: (_, record) => (
+                record['finished'] ? '是' : '否'
+            )
         },
         {
             title: 'deadline',
@@ -113,8 +119,15 @@ const ViolationRecordsTable: React.FC = props => {
         {
             title: '操作',
             dataIndex: 'owner',
-            width: 100,
+            width: 150,
             fixed: 'right',
+            render: (_, record) => (
+                <>
+                    <a onClick={() => mod(record['id'])}>编辑</a>
+                    <Divider type="vertical"/>
+                    <a onClick={() => del(record['id'])}>删除</a>
+                </>
+            )
         },
 
     ];
@@ -122,12 +135,12 @@ const ViolationRecordsTable: React.FC = props => {
         <ProTable<ViolationRecord>
             search={false}
             toolBarRender={false}
-            rowKey="_id"
+            rowKey="id"
             tableAlertRender={false}
-            dataSource={data}
+            dataSource={dataSource}
             columns={columns}
             bordered
-            scroll={{x:'200%'}}
+            scroll={{x: '230%'}}
             size='small'
             pagination={false}
         />

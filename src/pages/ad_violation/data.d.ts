@@ -3,18 +3,15 @@ export interface Product {
     owner: string;
     package_name: string;
     state: number;
-    _id?: string;
 }
 
 export interface Mail {
-    _id?:string;
     content: string;
     id: string;
     title: string;
 }
 
 export interface ViolationRecord {
-    _id?: string;
     alarm_content: string;
     alarm_emails: any[];
     associate_email: string[];
@@ -27,8 +24,8 @@ export interface ViolationRecord {
     owner: string[];
     owner_type: string;
     package_names: string[];
-    solve_file_url: string;
-    file_url: string;
+    solve_file_url?: string;
+    file_url?: string;
     results: string;
     status: string;
     time: string;
