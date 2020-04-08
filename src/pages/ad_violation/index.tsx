@@ -4,7 +4,7 @@ import React, {useState, useRef} from 'react';
 import {PageHeaderWrapper} from '@ant-design/pro-layout';
 import ProTable, {ProColumns, ActionType} from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
-import UpdateForm, {FormValueType} from './components/UpdateForm';
+import UpdateForm from './components/UpdateForm';
 import {TableListItem} from './data.d';
 import {addAdviolation, modAdviolation, queryAdviolations} from "@/services/advertisement";
 
@@ -12,11 +12,11 @@ import {addAdviolation, modAdviolation, queryAdviolations} from "@/services/adve
  * 添加节点
  * @param fields
  */
-const handleAdd = async (fields: FormValueType) => {
+const handleAdd = async (fields: any) => {
     const hide = message.loading('正在添加');
     try {
-        await addAdviolation(fields);
         hide();
+        await addAdviolation(fields);
         message.success('添加成功');
         return true;
     } catch (error) {
@@ -30,17 +30,17 @@ const handleAdd = async (fields: FormValueType) => {
  * 更新节点
  * @param fields
  */
-const handleUpdate = async (fields: FormValueType) => {
-    const hide = message.loading('正在配置');
+const handleUpdate = async (fields: any) => {
+    const hide = message.loading('正在修改');
     try {
-        console.log(fields)
-        await modAdviolation(fields);
+        console.log(fields);
         hide();
-        message.success('配置成功');
+        await modAdviolation(fields);
+        message.success('修改成功');
         return true;
     } catch (error) {
         hide();
-        message.error('配置失败请重试！');
+        message.error('修改失败请重试！');
         return false;
     }
 };
@@ -67,7 +67,7 @@ const handleRemove = async (id: string) => {
 const Adviolation: React.FC<{}> = () => {
     const [createModalVisible, handleModalVisible] = useState<boolean>(false);
     const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-    const [stepFormValues, setStepFormValues] = useState({});
+    const [modFormValues, setModFormValues] = useState<TableListItem | any>({});
     const actionRef = useRef<ActionType>();
     const columns: ProColumns<TableListItem>[] = [
         {
@@ -107,7 +107,7 @@ const Adviolation: React.FC<{}> = () => {
                     <a
                         onClick={() => {
                             handleUpdateModalVisible(true);
-                            setStepFormValues(record);
+                            setModFormValues(record);
                         }}
                     >
                         编辑
@@ -160,26 +160,28 @@ const Adviolation: React.FC<{}> = () => {
                 columns={columns}
                 // rowSelection={{}}
             />
-            <CreateForm
-                onSubmit={async value => {
-                    const response = await handleAdd(value);
-                    if (response?.['code'] == 200) {
-                        handleModalVisible(false);
-                        if (actionRef.current) {
-                            actionRef.current.reload();
+            {
+                createModalVisible && <CreateForm
+                    onSubmit={async value => {
+                        const response = await handleAdd(value);
+                        if (response) {
+                            handleModalVisible(false);
+                            if (actionRef.current) {
+                                actionRef.current.reload();
+                            }
                         }
-                    }
-                }}
-                onCancel={() => handleModalVisible(false)}
-                modalVisible={createModalVisible}
-            />
-            {stepFormValues && Object.keys(stepFormValues).length ? (
+                    }}
+                    onCancel={() => handleModalVisible(false)}
+                    modalVisible={createModalVisible}
+                />
+            }
+            {modFormValues && Object.keys(modFormValues).length ? (
                 <UpdateForm
                     onSubmit={async value => {
                         const success = await handleUpdate(value);
                         if (success) {
                             handleModalVisible(false);
-                            setStepFormValues({});
+                            setModFormValues({});
                             if (actionRef.current) {
                                 actionRef.current.reload();
                             }
@@ -187,10 +189,10 @@ const Adviolation: React.FC<{}> = () => {
                     }}
                     onCancel={() => {
                         handleUpdateModalVisible(false);
-                        setStepFormValues({});
+                        setModFormValues({});
                     }}
-                    updateModalVisible={updateModalVisible}
-                    values={stepFormValues}
+                    modalVisible={updateModalVisible}
+                    values={modFormValues}
                 />
             ) : null}
         </PageHeaderWrapper>

@@ -120,10 +120,15 @@ const CreateForm: React.FC<CreateFormProps> = props => {
     const okHandle = async () => {
         const fieldsValue = await form.validateFields();
         // form.resetFields();
-        fieldsValue.products = productTableData.map(item => delete item['id']);
-        fieldsValue.violation_records = violationTableData.map(item => delete item['id']);
+        fieldsValue.products = productTableData.map(item => {
+            delete item['id'];
+            return item;
+        });
+        fieldsValue.violation_records = violationTableData.map(item => {
+            delete item['id'];
+            return item;
+        });
         fieldsValue.source_emails = mailTableData;
-        console.log(fieldsValue);
         handleAdd(fieldsValue);
     };
     return (
@@ -259,7 +264,6 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                 }}/>
             }
 
-
             {
                 mailModal && <AddMail modalVisible={mailModal} initValue={modEmailInfo} onSubmit={(params: Mail) => {
                     addMail(params);
@@ -270,7 +274,6 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                     setMailModal(false);
                 }}/>
             }
-
         </Modal>
     );
 };
