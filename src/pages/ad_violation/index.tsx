@@ -1,11 +1,11 @@
 import {DownOutlined, PlusOutlined} from '@ant-design/icons';
-import {Button, Dropdown, Menu, message} from 'antd';
+import {Button, Divider, Dropdown, Menu, message} from 'antd';
 import React, {useState, useRef} from 'react';
 import {PageHeaderWrapper} from '@ant-design/pro-layout';
 import ProTable, {ProColumns, ActionType} from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import {TableListItem} from './data.d';
+import {TableListItem, ViolationRecord} from './data.d';
 import {addAdviolation, modAdviolation, queryAdviolations} from "@/services/advertisement";
 
 /**
@@ -64,9 +64,30 @@ const handleRemove = async (id: string) => {
     // }
 };
 
+const acquireData = async (params, toggle) => {
+    const res = await queryAdviolations(params);
+    const dataList = {data:[]};
+    if (!toggle) {
+        res.data.forEach(item => {
+            if(item.violation_records.length>0){
+                item.violation_records.forEach(vio => {
+                    let newItem = item;
+                    newItem.violation_record = vio;
+                    dataList.data.push(newItem)
+                })
+            }else {
+                dataList.data.push(item)
+            }
+        });
+        return dataList;
+    }
+    return res
+};
+
 const Adviolation: React.FC<{}> = () => {
     const [createModalVisible, handleModalVisible] = useState<boolean>(false);
     const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
+    const [isViolationView, setIsViolationView] = useState(false);
     const [modFormValues, setModFormValues] = useState<TableListItem | any>({});
     const actionRef = useRef<ActionType>();
     const columns: ProColumns<TableListItem>[] = [
@@ -107,20 +128,68 @@ const Adviolation: React.FC<{}> = () => {
                     <a
                         onClick={() => {
                             handleUpdateModalVisible(true);
+                            console.log(record)
                             setModFormValues(record);
                         }}
                     >
                         编辑
                     </a>
-                    {/*<Divider type="vertical"/>*/}
-                    {/*<a onClick={async () => {*/}
-                    {/*    await handleRemove(record._id);*/}
-                    {/*    actionRef.current?.reload()*/}
-                    {/*}}>删除</a>*/}
                 </>
             ),
         },
     ];
+    const violationColumns: ProColumns<TableListItem> = [
+        {
+            title: '日期',
+            dataIndex: ['violation_record','time'],
+        },
+        {
+            title: '违规类型',
+            dataIndex: ['violation_record','tag'],
+        },
+        {
+            title: '平台',
+            dataIndex: 'platform'
+        },
+        {
+            title: 'Account',
+            dataIndex: 'account'
+        },
+        {
+            title: '涉及package',
+            dataIndex: ['violation_record','package_names'],
+        },
+        {
+            title: '违规内容',
+            dataIndex: 'violation_record.content'
+        },
+        {
+            title: '违规等级',
+            dataIndex: ['violation_record','level'],
+            valueEnum: {
+                0: {text: '轻微', status: 'Default'},
+                1: {text: '中等', status: 'Warning'},
+                2: {text: '严重', status: 'Error'},
+            }
+        },
+        {
+            title: '应对措施',
+            dataIndex: ['violation_record','measure'],
+        },
+        {
+            title: '处理结果',
+            dataIndex: ['violation_record','results'],
+        },
+        {
+            title: '操作',
+            width: 150,
+            fixed: 'right',
+            render: (_, record) => (
+                <>
+                    <a onClick={()=>console.log(record)}>编辑</a>
+                </>
+            )
+        },];
 
     return (
         <PageHeaderWrapper>
@@ -133,6 +202,11 @@ const Adviolation: React.FC<{}> = () => {
                     <Button icon={<PlusOutlined/>} type="primary" onClick={() => handleModalVisible(true)}>
                         新建
                     </Button>,
+                    <Button
+                        onClick={() => {
+                            setIsViolationView(!isViolationView);
+                            action.reload()
+                        }}>{isViolationView ? '切换到账号编辑视图' : '切换到违规列表视图'}</Button>,
                     selectedRows && selectedRows.length > 0 && (
                         <Dropdown
                             overlay={
@@ -156,8 +230,8 @@ const Adviolation: React.FC<{}> = () => {
                     ),
                 ]}
                 tableAlertRender={false}
-                request={(params: any) => queryAdviolations(params)}
-                columns={columns}
+                request={(params: any) => acquireData(params, isViolationView)}
+                columns={isViolationView ? violationColumns : columns}
                 // rowSelection={{}}
             />
             {

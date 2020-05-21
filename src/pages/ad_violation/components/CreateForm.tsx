@@ -120,11 +120,11 @@ const CreateForm: React.FC<CreateFormProps> = props => {
     const okHandle = async () => {
         const fieldsValue = await form.validateFields();
         // form.resetFields();
-        fieldsValue.products = productTableData.map(item => {
+        fieldsValue.ad_products = productTableData.map(item => {
             delete item['id'];
             return item;
         });
-        fieldsValue.violation_records = violationTableData.map(item => {
+        fieldsValue.ad_violation_records = violationTableData.map(item => {
             delete item['id'];
             return item;
         });
@@ -184,7 +184,7 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                 </FormItem>
                 <FormItem
                     label="产品"
-                    name='products'
+                    name='ad_products'
                 >
                     <div>
                         <div>
@@ -207,7 +207,7 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                 </FormItem>
                 <FormItem
                     label="违规记录"
-                    name="violation_records"
+                    name="ad_violation_records"
                 >
                     <div>
                         <div>

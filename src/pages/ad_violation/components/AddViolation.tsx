@@ -77,7 +77,6 @@ const AddViolation: React.FC<ViolationRecordsProps> = props => {
                 <FormItem
                     label="违规类型"
                     name="tag"
-                    rules={[{required: true, message: 'Package Name不可以为空!'}]}
                 >
                     <Input placeholder={'请输入违规类型!'}/>
                 </FormItem>
@@ -85,6 +84,8 @@ const AddViolation: React.FC<ViolationRecordsProps> = props => {
                 <FormItem
                     label="牵涉包名"
                     name="package_names"
+                    rules={[{required: true, message: '请填写牵涉包名!'}]}
+
                 >
                     <Select mode="tags" style={{width: '100%'}} placeholder="请输入牵涉包名!">
                     </Select>
@@ -139,6 +140,8 @@ const AddViolation: React.FC<ViolationRecordsProps> = props => {
                 <FormItem
                     label="违规等级"
                     name="level"
+                    rules={[{required: true, message: '违规等级不可以为空!'}]}
+
                 >
                     <Select placeholder={'请选择违规等级'}>
                         {
@@ -163,6 +166,7 @@ const AddViolation: React.FC<ViolationRecordsProps> = props => {
                 <FormItem
                     label="采取措施"
                     name="measure"
+                    rules={[{required: true, message: '采取措施不可以为空!'}]}
                 >
                     <TextArea rows={2} placeholder={'请填写采取措施!'}/>
                 </FormItem>
@@ -170,6 +174,8 @@ const AddViolation: React.FC<ViolationRecordsProps> = props => {
                 <FormItem
                     label="最终结果"
                     name="results"
+                    rules={[{required: true, message: '最终结果不可以为空!'}]}
+
                 >
                     <TextArea rows={2} placeholder={'请填写最终结果!'}/>
                 </FormItem>
@@ -193,7 +199,7 @@ const AddViolation: React.FC<ViolationRecordsProps> = props => {
                 <FormItem
                     label="处理deadline"
                     name="deadline"
-                    rules={[{required: true, message: '请选择日期!'}]}
+                    rules={[{required: true, message: '日期不可以为空!'}]}
                 >
                     <DatePicker style={{width: '100%'}}/>
                 </FormItem>
@@ -201,6 +207,7 @@ const AddViolation: React.FC<ViolationRecordsProps> = props => {
                 <FormItem
                     label="报警邮箱"
                     name="alarm_emails"
+                    rules={[{required:true,message:'报警邮箱不可以为空!'}]}
                 >
                     <Select mode="tags" placeholder="请添加报警邮箱!">
                     </Select>
@@ -209,6 +216,7 @@ const AddViolation: React.FC<ViolationRecordsProps> = props => {
                 <FormItem
                     label="报警内容"
                     name="alarm_content"
+                    rules={[{required:true, message:'报警内容不可以为空!'}]}
                 >
                     <TextArea rows={2} placeholder='请输入报警内容!'/>
                 </FormItem>
@@ -216,6 +224,8 @@ const AddViolation: React.FC<ViolationRecordsProps> = props => {
                 <FormItem
                     label="有关邮件"
                     name="associate_email"
+                    rules={[{required: true, message: '有关邮件不可以为空!'}]}
+
                 >
                     <Select mode="tags" placeholder="请添加有关邮件!">
                     </Select>

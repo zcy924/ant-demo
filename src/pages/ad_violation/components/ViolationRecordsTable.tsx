@@ -10,28 +10,7 @@ export interface ProductsTableProps {
 }
 
 const ViolationRecordsTable: React.FC<ProductsTableProps> = props => {
-    // const data: ViolationRecord[] = [{
-    //     _id: '1das',
-    //     alarm_content: 'string',
-    //     alarm_emails: ['any[]'],
-    //     associate_email: ['string[]'],
-    //     content: 'sasdad',
-    //     deadline: 'string',
-    //     finished: true,
-    //     level: 1,
-    //     measure: 'string',
-    //     need_alarm: false,
-    //     owner: ['string[]'],
-    //     owner_type: 'string;',
-    //     package_names: ['.dsadada'],
-    //     solve_file_url: 'string;',
-    //     file_url: 'string;',
-    //     results: ',sadadad',
-    //     status: 'string;',
-    //     time: 'string;'
-    // }];
     const {dataSource, del, mod} = props;
-
     const columns: ProColumns<ViolationRecord>[] = [
         {
             title: '时间',
@@ -39,11 +18,11 @@ const ViolationRecordsTable: React.FC<ProductsTableProps> = props => {
         },
         {
             title: '违规类型',
-            dataIndex: 'package_name',
+            dataIndex: 'tag',
         },
         {
             title: '涉及package',
-            dataIndex: 'owner',
+            dataIndex: 'package_names',
         },
         {
             title: '处理Owner',
