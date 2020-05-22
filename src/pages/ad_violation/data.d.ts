@@ -39,9 +39,9 @@ export interface TableListItem {
     company: string;
     owner: string;
     source_emails: Mail[];
-    products: Product[];
-    violation_records: ViolationRecord[];
-    _id: string;
+    ad_products: Product[];
+    ad_violation_records: ViolationRecord[];
+    id: string;
 }
 
 export interface TableListPagination {

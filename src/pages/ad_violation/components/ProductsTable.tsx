@@ -5,8 +5,8 @@ import {Divider} from "antd";
 
 export interface ProductsTableProps {
     dataSource: Product[]
-    del: (id: string) => void
-    mod: (id: string) => void
+    del: (key: string) => void
+    mod: (key: string) => void
 }
 
 const ProductsTable: React.FC<ProductsTableProps> = props => {
@@ -37,9 +37,9 @@ const ProductsTable: React.FC<ProductsTableProps> = props => {
             width: 150,
             render: (_, record) => (
                 <>
-                    <a onClick={() => mod(record['id'])}>编辑</a>
+                    <a onClick={() => mod(record['key'])}>编辑</a>
                     <Divider type='vertical'/>
-                    <a onClick={() => del(record['id'])}>删除</a>
+                    <a onClick={() => del(record['key'])}>删除</a>
                 </>
             )
         }
@@ -49,7 +49,7 @@ const ProductsTable: React.FC<ProductsTableProps> = props => {
         <ProTable<Product>
             search={false}
             toolBarRender={false}
-            rowKey="id"
+            rowKey="key"
             tableAlertRender={false}
             dataSource={dataSource}
             columns={columns}

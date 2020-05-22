@@ -41,7 +41,7 @@ const AddViolation: React.FC<ViolationRecordsProps> = props => {
         const params: any = await form.validateFields();
         params.time = moment(params.time).format('YYYY-MM-DD');
         params.deadline = moment(params.deadline).format('YYYY-MM-DD');
-        params['id'] = initValue ? initValue['id'] : guid();
+        params['key'] = initValue ? initValue['key'] : guid();
         form.resetFields();
         onSubmit(params);
     };

@@ -1,12 +1,12 @@
 import {DownOutlined, PlusOutlined} from '@ant-design/icons';
 import {Button, Divider, Dropdown, Menu, message} from 'antd';
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {PageHeaderWrapper} from '@ant-design/pro-layout';
 import ProTable, {ProColumns, ActionType} from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
 import {TableListItem, ViolationRecord} from './data.d';
-import {addAdviolation, modAdviolation, queryAdviolations} from "@/services/advertisement";
+import {addOrModAdviolation, queryAdviolations} from "@/services/advertisement";
 
 /**
  * 添加节点
@@ -16,7 +16,7 @@ const handleAdd = async (fields: any) => {
     const hide = message.loading('正在添加');
     try {
         hide();
-        await addAdviolation(fields);
+        await addOrModAdviolation(fields);
         message.success('添加成功');
         return true;
     } catch (error) {
@@ -35,7 +35,7 @@ const handleUpdate = async (fields: any) => {
     try {
         console.log(fields);
         hide();
-        await modAdviolation(fields);
+        await addOrModAdviolation(fields);
         message.success('修改成功');
         return true;
     } catch (error) {
@@ -50,38 +50,6 @@ const handleUpdate = async (fields: any) => {
  * @param selectedRows
  */
 const handleRemove = async (id: string) => {
-    // const hide = message.loading('正在删除');
-    // if (!id) return true;
-    // try {
-    //     await delSecurityIncident(id);
-    //     hide();
-    //     message.success('删除成功，即将刷新');
-    //     return true;
-    // } catch (error) {
-    //     hide();
-    //     message.error('删除失败，请重试');
-    //     return false;
-    // }
-};
-
-const acquireData = async (params, toggle) => {
-    const res = await queryAdviolations(params);
-    const dataList = {data:[]};
-    if (!toggle) {
-        res.data.forEach(item => {
-            if(item.violation_records.length>0){
-                item.violation_records.forEach(vio => {
-                    let newItem = item;
-                    newItem.violation_record = vio;
-                    dataList.data.push(newItem)
-                })
-            }else {
-                dataList.data.push(item)
-            }
-        });
-        return dataList;
-    }
-    return res
 };
 
 const Adviolation: React.FC<{}> = () => {
@@ -137,15 +105,16 @@ const Adviolation: React.FC<{}> = () => {
                 </>
             ),
         },
-    ];
+    ]
+
     const violationColumns: ProColumns<TableListItem> = [
         {
             title: '日期',
-            dataIndex: ['violation_record','time'],
+            dataIndex: ['violation_record', 'time'],
         },
         {
             title: '违规类型',
-            dataIndex: ['violation_record','tag'],
+            dataIndex: ['violation_record', 'tag'],
         },
         {
             title: '平台',
@@ -157,7 +126,7 @@ const Adviolation: React.FC<{}> = () => {
         },
         {
             title: '涉及package',
-            dataIndex: ['violation_record','package_names'],
+            dataIndex: ['violation_record', 'package_names'],
         },
         {
             title: '违规内容',
@@ -165,7 +134,7 @@ const Adviolation: React.FC<{}> = () => {
         },
         {
             title: '违规等级',
-            dataIndex: ['violation_record','level'],
+            dataIndex: ['violation_record', 'level'],
             valueEnum: {
                 0: {text: '轻微', status: 'Default'},
                 1: {text: '中等', status: 'Warning'},
@@ -174,11 +143,11 @@ const Adviolation: React.FC<{}> = () => {
         },
         {
             title: '应对措施',
-            dataIndex: ['violation_record','measure'],
+            dataIndex: ['violation_record', 'measure'],
         },
         {
             title: '处理结果',
-            dataIndex: ['violation_record','results'],
+            dataIndex: ['violation_record', 'results'],
         },
         {
             title: '操作',
@@ -186,10 +155,33 @@ const Adviolation: React.FC<{}> = () => {
             fixed: 'right',
             render: (_, record) => (
                 <>
-                    <a onClick={()=>console.log(record)}>编辑</a>
+                    <a onClick={() => console.log(record)}>编辑</a>
                 </>
             )
         },];
+
+    const acquireData = async (params: any) => {
+        const res = await queryAdviolations(params);
+        const dataList: { data: any[] } = {data: []};
+        if (!isViolationView) {
+            res.data.forEach((item: TableListItem) => {
+                if (item.ad_violation_records.length > 0) {
+                    item.ad_violation_records.forEach(vio => {
+                        const newItem = item;
+                        newItem['violation_record'] = vio;
+                        dataList.data.push(newItem)
+                    })
+                } else {
+                    dataList.data.push(item)
+                }
+            });
+            console.log(dataList)
+            return dataList;
+        } else {
+            return res
+        }
+
+    };
 
     return (
         <PageHeaderWrapper>
@@ -197,14 +189,14 @@ const Adviolation: React.FC<{}> = () => {
                 headerTitle="AD Account Risk Management"
                 actionRef={actionRef}
                 dateFormatter={'string'}
-                rowKey="_id"
+                rowKey="id"
                 toolBarRender={(action, {selectedRows}) => [
                     <Button icon={<PlusOutlined/>} type="primary" onClick={() => handleModalVisible(true)}>
                         新建
                     </Button>,
                     <Button
                         onClick={() => {
-                            setIsViolationView(!isViolationView);
+                            setIsViolationView(!isViolationView)
                             action.reload()
                         }}>{isViolationView ? '切换到账号编辑视图' : '切换到违规列表视图'}</Button>,
                     selectedRows && selectedRows.length > 0 && (
@@ -230,7 +222,7 @@ const Adviolation: React.FC<{}> = () => {
                     ),
                 ]}
                 tableAlertRender={false}
-                request={(params: any) => acquireData(params, isViolationView)}
+                request={(params: any) => acquireData(params)}
                 columns={isViolationView ? violationColumns : columns}
                 // rowSelection={{}}
             />

@@ -5,15 +5,15 @@ import {Divider} from "antd";
 
 interface EmailTableProps {
     dataSource: Mail[];
-    del: (id: string) => void;
-    mod: (id: string) => void;
+    del: (key: string) => void;
+    mod: (key: string) => void;
 }
 
 const EmailTable: React.FC<EmailTableProps> = props => {
     // const data: Mail[] = [{
     //     content: 'string',
     //     title: 'string',
-    //     id: 'sdsada'
+    //     key: 'sdsada'
     // }];
     const {dataSource, del, mod} = props;
 
@@ -30,9 +30,9 @@ const EmailTable: React.FC<EmailTableProps> = props => {
             title: '操作',
             render: (_, record) => (
                 <>
-                    <a onClick={() => mod(record['id'])}>编辑</a>
+                    <a onClick={() => mod(record['key'])}>编辑</a>
                     <Divider type="vertical"/>
-                    <a onClick={() => del(record['id'])}>删除</a>
+                    <a onClick={() => del(record['key'])}>删除</a>
                 </>
             )
         },
@@ -41,7 +41,7 @@ const EmailTable: React.FC<EmailTableProps> = props => {
         <ProTable<Mail>
             search={false}
             toolBarRender={false}
-            rowKey="id"
+            rowKey="key"
             tableAlertRender={false}
             dataSource={dataSource}
             columns={columns}

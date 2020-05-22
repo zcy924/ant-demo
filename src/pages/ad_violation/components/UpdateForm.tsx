@@ -54,18 +54,21 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     const [violationModal, setViolationModal] = useState(false);
     const [mailModal, setMailModal] = useState(false);
     const [productTableData, setProductTableData] = useState<Product[]>(
-        initValue.products.map((item) => {
-            item["id"] = guid();
+        initValue.ad_products.map((item) => {
+            item["key"] = guid();
             return item;
         })
     );
     const [violationTableData, setViolationTableData] = useState<ViolationRecord[]>(
-        initValue.violation_records.map((item) => {
-            item["id"] = guid();
+        initValue.ad_violation_records.map((item) => {
+            item["key"] = guid();
             return item;
         })
     );
-    const [mailTableData, setMailTableData] = useState<Mail[]>(initValue.source_emails);
+    const [mailTableData, setMailTableData] = useState<Mail[]>(initValue.source_emails.map(item => {
+        item["key"] = guid()
+        return item
+    }));
     const {modalVisible, onSubmit: handleAdd, onCancel} = props;
     const [modProductInfo, setModProductInfo] = useState();
     const [modViolationInfo, setModlViolationInfo] = useState();
@@ -74,7 +77,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         // 判断列表中是否已存在相同id，存在则替换item，不存在则增加item
         let flag = true;
         productTableData.forEach((item, index) => {
-            if (params["id"] === item["id"]) {
+            if (params["key"] === item["key"]) {
                 productTableData[index] = params;
                 setProductTableData([...productTableData]);
                 flag = false;
@@ -82,14 +85,14 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         });
         flag && setProductTableData([...productTableData, params]);
     };
-    const delProduct = (id: string) => {
+    const delProduct = (key: string) => {
         setProductTableData([
-            ...productTableData.filter((item) => item["id"] !== id),
+            ...productTableData.filter((item) => item["key"] !== key),
         ]);
     };
 
-    const modProduct = (id: string) => {
-        const [tempData] = productTableData.filter((item) => item["id"] === id);
+    const modProduct = (key: string) => {
+        const [tempData] = productTableData.filter((item) => item["key"] === key);
         setModProductInfo(tempData);
         setProductModal(true);
     };
@@ -97,7 +100,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     const addViolationRecord = (params: ViolationRecord) => {
         let flag = true;
         violationTableData.forEach((item, index) => {
-            if (params["id"] === item["id"]) {
+            if (params["key"] === item["key"]) {
                 violationTableData[index] = params;
                 setViolationTableData([...violationTableData]);
                 flag = false;
@@ -105,21 +108,21 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         });
         flag && setViolationTableData([...violationTableData, params]);
     };
-    const modViolation = (id: string) => {
-        const [tempData] = violationTableData.filter((item) => item["id"] === id);
+    const modViolation = (key: string) => {
+        const [tempData] = violationTableData.filter((item) => item["key"] === key);
         setModlViolationInfo(tempData);
         setViolationModal(true);
     };
-    const delViolation = (id: string) => {
+    const delViolation = (key: string) => {
         setViolationTableData([
-            ...violationTableData.filter((item) => item["id"] !== id),
+            ...violationTableData.filter((item) => item["key"] !== key),
         ]);
     };
 
     const addMail = (params: Mail) => {
         let flag = true;
         mailTableData.forEach((item, index) => {
-            if (params["id"] === item["id"]) {
+            if (params["key"] === item["key"]) {
                 mailTableData[index] = params;
                 setMailTableData([...mailTableData]);
                 flag = false;
@@ -127,11 +130,11 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         });
         flag && setMailTableData([...mailTableData, params]);
     };
-    const delMail = (id: string) => {
-        setMailTableData([...mailTableData.filter((item) => item["id"] !== id)]);
+    const delMail = (key: string) => {
+        setMailTableData([...mailTableData.filter((item) => item["key"] !== key)]);
     };
-    const modMail = (id: string) => {
-        const [tempData] = mailTableData.filter((item) => item["id"] === id);
+    const modMail = (key: string) => {
+        const [tempData] = mailTableData.filter((item) => item["key"] === key);
         setModEmailInfo(tempData);
         setMailModal(true);
     };
@@ -139,16 +142,10 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     const okHandle = async () => {
         const fieldsValue = await form.validateFields();
         // form.resetFields();
-        fieldsValue.products = productTableData.map((item) => {
-            delete item["id"];
-            return item;
-        });
-        fieldsValue.violation_records = violationTableData.map((item) => {
-            delete item["id"];
-            return item;
-        });
+        fieldsValue.ad_products = productTableData
+        fieldsValue.ad_violation_records = violationTableData
         fieldsValue.source_emails = mailTableData;
-        fieldsValue['_id'] = initValue._id;
+        fieldsValue['id'] = initValue.id;
         handleAdd(fieldsValue);
     };
     return (
@@ -193,7 +190,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
                         ))}
                     </Select>
                 </FormItem>
-                <FormItem label="产品" name="products">
+                <FormItem label="产品" name="ad_products">
                     <div>
                         <div>
                             <Button
@@ -215,18 +212,18 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
                             <div style={{marginTop: "8px"}}>
                                 <ProductsTable
                                     dataSource={productTableData}
-                                    del={(id: string) => {
-                                        delProduct(id);
+                                    del={(key: string) => {
+                                        delProduct(key);
                                     }}
-                                    mod={(id) => {
-                                        modProduct(id);
+                                    mod={(key) => {
+                                        modProduct(key);
                                     }}
                                 />
                             </div>
                         ) : null}
                     </div>
                 </FormItem>
-                <FormItem label="违规记录" name="violation_records">
+                <FormItem label="违规记录" name="ad_violation_records">
                     <div>
                         <div>
                             <Input
@@ -244,9 +241,9 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
                         <div style={{marginTop: "8px"}}>
                             <ViolationRecordsTable
                                 dataSource={violationTableData}
-                                del={(id: string) => delViolation(id)}
-                                mod={(id: string) => {
-                                    modViolation(id);
+                                del={(key: string) => delViolation(key)}
+                                mod={(key: string) => {
+                                    modViolation(key);
                                 }}
                             />
                         </div>
@@ -263,8 +260,8 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
                         <div style={{marginTop: "8px"}}>
                             <EmailTable
                                 dataSource={mailTableData}
-                                del={(id) => delMail(id)}
-                                mod={(id) => modMail(id)}
+                                del={(key) => delMail(key)}
+                                mod={(key) => modMail(key)}
                             />
                         </div>
                     </div>

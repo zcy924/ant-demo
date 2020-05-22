@@ -7,6 +7,7 @@ import AddViolation from "@/pages/ad_violation/components/AddViolation";
 import EmailTable from "@/pages/ad_violation/components/EmailTable";
 import AddMail from "@/pages/ad_violation/components/AddMail";
 import {Mail, Product, ViolationRecord} from "@/pages/ad_violation/data";
+import {guid} from "@/utils/utils";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -57,7 +58,7 @@ const CreateForm: React.FC<CreateFormProps> = props => {
         // 判断列表中是否已存在相同id，存在则替换item，不存在则增加item
         let flag = true;
         productTableData.forEach((item, index) => {
-            if (params['id'] === item['id']) {
+            if (params['key'] === item['key']) {
                 productTableData[index] = params;
                 setProductTableData([...productTableData]);
                 flag = false
@@ -67,12 +68,12 @@ const CreateForm: React.FC<CreateFormProps> = props => {
 
 
     };
-    const delProduct = (id: string) => {
-        setProductTableData([...productTableData.filter(item => item['id'] !== id)])
+    const delProduct = (key: string) => {
+        setProductTableData([...productTableData.filter(item => item['key'] !== key)])
     };
 
-    const modProduct = (id: string) => {
-        const [tempData] = productTableData.filter(item => item['id'] === id);
+    const modProduct = (key: string) => {
+        const [tempData] = productTableData.filter(item => item['key'] === key);
         setModProductInfo(tempData);
         setProductModal(true);
     };
@@ -80,7 +81,7 @@ const CreateForm: React.FC<CreateFormProps> = props => {
     const addViolationRecord = (params: ViolationRecord) => {
         let flag = true;
         violationTableData.forEach((item, index) => {
-            if (params['id'] === item['id']) {
+            if (params['key'] === item['key']) {
                 violationTableData[index] = params;
                 setViolationTableData([...violationTableData]);
                 flag = false
@@ -88,19 +89,19 @@ const CreateForm: React.FC<CreateFormProps> = props => {
         });
         flag && setViolationTableData([...violationTableData, params]);
     };
-    const modViolation = (id: string) => {
-        const [tempData] = violationTableData.filter(item => item['id'] === id);
+    const modViolation = (key: string) => {
+        const [tempData] = violationTableData.filter(item => item['key'] === key);
         setModlViolationInfo(tempData);
         setViolationModal(true);
     };
-    const delViolation = (id: string) => {
-        setViolationTableData([...violationTableData.filter(item => item['id'] !== id)])
+    const delViolation = (key: string) => {
+        setViolationTableData([...violationTableData.filter(item => item['key'] !== key)])
     };
 
     const addMail = (params: Mail) => {
         let flag = true;
         mailTableData.forEach((item, index) => {
-            if (params['id'] === item['id']) {
+            if (params['key'] === item['key']) {
                 mailTableData[index] = params;
                 setMailTableData([...mailTableData]);
                 flag = false
@@ -108,11 +109,11 @@ const CreateForm: React.FC<CreateFormProps> = props => {
         });
         flag && setMailTableData([...mailTableData, params]);
     };
-    const delMail = (id: string) => {
-        setMailTableData([...mailTableData.filter(item => item['id'] !== id)]);
+    const delMail = (key: string) => {
+        setMailTableData([...mailTableData.filter(item => item['key'] !== key)]);
     };
-    const modMail = (id: string) => {
-        const [tempData] = mailTableData.filter(item => item['id'] === id);
+    const modMail = (key: string) => {
+        const [tempData] = mailTableData.filter(item => item['key'] === key);
         setModEmailInfo(tempData);
         setMailModal(true);
     };
@@ -121,11 +122,11 @@ const CreateForm: React.FC<CreateFormProps> = props => {
         const fieldsValue = await form.validateFields();
         // form.resetFields();
         fieldsValue.ad_products = productTableData.map(item => {
-            delete item['id'];
+            delete item['key'];
             return item;
         });
         fieldsValue.ad_violation_records = violationTableData.map(item => {
-            delete item['id'];
+            delete item['key'];
             return item;
         });
         fieldsValue.source_emails = mailTableData;
@@ -196,10 +197,10 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                         </div>
                         {
                             expandProducts ? <div style={{marginTop: '8px'}}>
-                                <ProductsTable dataSource={productTableData} del={(id: string) => {
-                                    delProduct(id)
-                                }} mod={(id) => {
-                                    modProduct(id)
+                                <ProductsTable dataSource={productTableData} del={(key: string) => {
+                                    delProduct(key)
+                                }} mod={(key) => {
+                                    modProduct(key)
                                 }}/>
                             </div> : null
                         }
@@ -217,8 +218,8 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                         </div>
                         <div style={{marginTop: '8px'}}>
                             <ViolationRecordsTable dataSource={violationTableData}
-                                                   del={(id: string) => delViolation(id)} mod={(id: string) => {
-                                modViolation(id)
+                                                   del={(key: string) => delViolation(key)} mod={(key: string) => {
+                                modViolation(key)
                             }}/>
                         </div>
                     </div>
@@ -234,7 +235,7 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                                     onClick={() => setMailModal(true)}>新增邮件</Button>
                         </div>
                         <div style={{marginTop: '8px'}}>
-                            <EmailTable dataSource={mailTableData} del={id => delMail(id)} mod={id => modMail(id)}/>
+                            <EmailTable dataSource={mailTableData} del={key => delMail(key)} mod={key => modMail(key)}/>
                         </div>
                     </div>
                 </FormItem>

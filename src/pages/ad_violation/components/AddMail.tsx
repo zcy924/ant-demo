@@ -23,7 +23,7 @@ const AddMail: React.FC<AddMailProps> = props => {
     const handleAdd = async () => {
         const params = await form.validateFields() as Mail;
         form.resetFields();
-        params['id'] = initValue ? initValue['id'] : guid();
+        params['key'] = initValue ? initValue['key'] : guid();
         onSubmit(params);
     }
     return (

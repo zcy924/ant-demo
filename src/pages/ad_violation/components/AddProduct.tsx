@@ -32,7 +32,7 @@ const AddProduct: React.FC<AddProductProps> = props => {
     const {modalVisible, onSubmit, onCancel, initValue} = props;
     const handleAdd = async () => {
         const params: any = await form.validateFields();
-        params['id'] = initValue ? initValue['id'] : guid();
+        params['key'] = initValue ? initValue['key'] : guid();
         onSubmit(params);
     };
     return (
@@ -40,7 +40,7 @@ const AddProduct: React.FC<AddProductProps> = props => {
             destroyOnClose
             width={'40%'}
             visible={modalVisible}
-            key="id"
+            key="key"
             onOk={() => handleAdd()}
             onCancel={() => {
                 onCancel()
