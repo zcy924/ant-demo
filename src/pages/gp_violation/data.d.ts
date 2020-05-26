@@ -38,10 +38,20 @@ export interface TableListItem {
     company: string;
     owner: string;
     in_whitelist: boolean;
+    pollution_state: string;
     source_emails: Mail[];
     ad_products: Product[];
     ad_violation_records: ViolationRecord[];
+    misuse_records: MisuseRecord[];
     id: string;
+}
+
+export interface MisuseRecord {
+    "time": string,
+    "operator": string,
+    "content": string,
+    "risk_assessment": string,
+    "may_associate_accounts": string[]
 }
 
 export interface TableListPagination {

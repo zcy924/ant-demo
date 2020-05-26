@@ -1,11 +1,11 @@
 import {DownOutlined, PlusOutlined} from '@ant-design/icons';
-import {Button, Divider, Dropdown, Menu, message} from 'antd';
-import React, {useState, useRef, useEffect} from 'react';
+import {Button, Dropdown, Menu, message} from 'antd';
+import React, {useState, useRef } from 'react';
 import {PageHeaderWrapper} from '@ant-design/pro-layout';
 import ProTable, {ProColumns, ActionType} from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import {TableListItem, ViolationRecord} from './data.d';
+import {TableListItem} from './data.d';
 import {addOrModAdviolation, queryAdviolations} from "@/services/advertisement";
 
 /**
@@ -60,13 +60,13 @@ const Adviolation: React.FC<{}> = () => {
     const actionRef = useRef<ActionType>();
     const columns: ProColumns<TableListItem>[] = [
         {
-            title: 'Platform',
-            dataIndex: 'platform',
+            title: 'Account',
+            dataIndex: 'account',
             sorter: true,
         },
         {
-            title: 'Account',
-            dataIndex: 'account',
+            title: 'Owner',
+            dataIndex: 'owner',
             hideInSearch: true
         },
         {
@@ -80,12 +80,12 @@ const Adviolation: React.FC<{}> = () => {
             },
         },
         {
-            title: 'Company',
-            dataIndex: 'company',
+            title: '关联污染状态',
+            dataIndex: 'pollution_state',
         },
         {
-            title: '管理员',
-            dataIndex: 'owner'
+            title: '反馈邮箱',
+            dataIndex: 'feedback_email'
         },
         {
             title: '操作',

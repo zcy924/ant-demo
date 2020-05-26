@@ -6,8 +6,11 @@ import ViolationRecordsTable from "@/pages/ad_violation/components/ViolationReco
 import AddViolation from "@/pages/ad_violation/components/AddViolation";
 import EmailTable from "@/pages/ad_violation/components/EmailTable";
 import AddMail from "@/pages/ad_violation/components/AddMail";
+import AddMisuseRecord from "@/pages/gp_violation/components/AddMisuseRecord";
 import {Mail, Product, ViolationRecord} from "@/pages/ad_violation/data";
 import TextArea from "antd/es/input/TextArea";
+import MisuseRecordTable from "@/pages/gp_violation/components/MisuseRecordTable";
+import {MisuseRecord} from "@/pages/gp_violation/data";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -45,15 +48,21 @@ const CreateForm: React.FC<CreateFormProps> = props => {
     const [expandProducts, setExpandProducts] = useState(false);
     const [productModal, setProductModal] = useState(false);
     const [violationModal, setViolationModal] = useState(false);
+    const [misuseModal, setMisuseModal] = useState(false);
     const [mailModal, setMailModal] = useState(false);
+
     const [productTableData, setProductTableData] = useState<Product[]>([]);
     const [violationTableData, setViolationTableData] = useState<ViolationRecord[]>([]);
     const [mailTableData, setMailTableData] = useState<Mail[]>([]);
+    const [misuseTableData, setMisuseTableData] = useState<MisuseRecord[]>([]);
+
     const {modalVisible, onSubmit: handleAdd, onCancel} = props;
 
     const [modProductInfo, setModProductInfo] = useState();
     const [modViolationInfo, setModlViolationInfo] = useState();
     const [modEmailInfo, setModEmailInfo] = useState();
+    const [modMisuseInfo, setModMisuseInfo] = useState();
+
     const addProduct = (params: Product) => {
         // 判断列表中是否已存在相同id，存在则替换item，不存在则增加item
         let flag = true;
@@ -118,6 +127,26 @@ const CreateForm: React.FC<CreateFormProps> = props => {
         setMailModal(true);
     };
 
+    const addMisuseRecord = (params: MisuseRecord) => {
+        let flag = true;
+        misuseTableData.forEach((item, index) => {
+            if (params['key'] === item['key']) {
+                misuseTableData[index] = params;
+                setMisuseTableData([...misuseTableData]);
+                flag = false
+            }
+        });
+        flag && setMisuseTableData([...misuseTableData, params]);
+    }
+    const delMisuseRecord = (key: string) => {
+        setMisuseTableData([...misuseTableData.filter(item => item['key'] !== key)]);
+    }
+    const modMisuseRecord = (key: string) => {
+        const [tempData] = misuseTableData.filter(item => item['key'] === key);
+        setMisuseTableData(tempData);
+        setMisuseModal(true);
+    }
+
     const okHandle = async () => {
         const fieldsValue = await form.validateFields();
         // form.resetFields();
@@ -180,7 +209,7 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                 </FormItem>
                 <FormItem
                     label="关联污染状态"
-                    name = "pollution_state"
+                    name="pollution_state"
                 >
                     <TextArea rows={2}></TextArea>
                 </FormItem>
@@ -257,7 +286,16 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                     label="人员误操作记录"
                     name="misuse_records"
                 >
-
+                    <div>
+                        <div>
+                            <Button type="primary"
+                                    onClick={() => setMisuseModal(true)}>新增人员误操作记录</Button>
+                        </div>
+                        <div style={{marginTop: '8px'}}>
+                            <MisuseRecordTable dataSource={misuseTableData} del={key => delMisuseRecord(key)}
+                                               mod={key => modMisuseRecord(key)}/>
+                        </div>
+                    </div>
                 </FormItem>
 
             </Form>
@@ -295,6 +333,20 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                     setModEmailInfo(null);
                     setMailModal(false);
                 }}/>
+            }
+
+            {
+                misuseModal &&
+                <AddMisuseRecord modalVisible={misuseModal} onSubmit={(params: MisuseRecord) => {
+                    addMisuseRecord(params);
+                    setModMisuseInfo(null);
+                    setMisuseModal(false);
+                }
+                } onCancel={() => {
+                    setModMisuseInfo(null)
+                    setMisuseModal(false)
+                }
+                } initValue={modMisuseInfo}/>
             }
         </Modal>
     );
