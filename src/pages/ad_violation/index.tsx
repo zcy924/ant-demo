@@ -205,7 +205,7 @@ const Adviolation: React.FC<{}> = () => {
                                 <Menu
                                     onClick={async e => {
                                         if (e.key === 'remove') {
-                                            await handleRemove(selectedRows.map(data => data._id).toString());
+                                            await handleRemove(selectedRows.map(data => data.id).toString());
                                             action.reload();
                                         }
                                     }}

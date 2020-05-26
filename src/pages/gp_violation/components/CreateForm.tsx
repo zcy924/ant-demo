@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, Form, Input, Modal, Select} from 'antd';
+import {Button, Form, Input, Modal, Select, Switch} from 'antd';
 import ProductsTable from "@/pages/ad_violation/components/ProductsTable";
 import AddProduct from "@/pages/ad_violation/components/AddProduct";
 import ViolationRecordsTable from "@/pages/ad_violation/components/ViolationRecordsTable";
@@ -7,6 +7,7 @@ import AddViolation from "@/pages/ad_violation/components/AddViolation";
 import EmailTable from "@/pages/ad_violation/components/EmailTable";
 import AddMail from "@/pages/ad_violation/components/AddMail";
 import {Mail, Product, ViolationRecord} from "@/pages/ad_violation/data";
+import TextArea from "antd/es/input/TextArea";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -147,30 +148,25 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                   {...formLayout}
             >
                 <FormItem
-                    label="广告平台"
-                    name="platform"
-                    rules={[{required: true, message: '广告平台不可以为空！'}]}
-                >
-                    <Input placeholder={'请输入广告平台!'}/>
-                </FormItem>
-                <FormItem
-                    label="广告账户"
+                    label="账户gmail"
                     name="account"
-                    rules={[{required: true, message: '广告账户不可以为空!'}]}
+                    rules={[{required: true, message: 'gmail账户不可以为空！'}]}
                 >
-                    <Input placeholder={'请输入广告账户!'}/>
+                    <Input placeholder={'请输入gmail账户!'}/>
                 </FormItem>
                 <FormItem
-                    label="公司"
-                    name="company"
-                >
-                    <Input placeholder={'请输入公司名称!'}/>
-                </FormItem>
-                <FormItem
-                    label="管理员"
+                    label="Owner"
                     name="owner"
+                    rules={[{required: true, message: '负责人不可以为空!'}]}
                 >
-                    <Input placeholder={'请输入管理员名称!'}/>
+                    <Input placeholder={'请输入负责人!'}/>
+                </FormItem>
+                <FormItem
+                    label="白名单"
+                    name="in_whitelist"
+                    valuePropName="checked"
+                >
+                    <Switch/>
                 </FormItem>
                 <FormItem
                     label="账号状态"
@@ -182,6 +178,25 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                         ))}
                     </Select>
                 </FormItem>
+                <FormItem
+                    label="关联污染状态"
+                    name = "pollution_state"
+                >
+                    <TextArea rows={2}></TextArea>
+                </FormItem>
+                <FormItem
+                    label="反馈邮箱"
+                    name="feedback_email"
+                >
+                    <Input></Input>
+                </FormItem>
+
+                <FormItem label="子账号" name="sub_accounts">
+                    <Select mode="tags" placeholder="请输入子账号!">
+                    </Select>
+                </FormItem>
+
+
                 <FormItem
                     label="产品"
                     name='ad_products'
@@ -207,7 +222,7 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                 </FormItem>
                 <FormItem
                     label="违规记录"
-                    name="ad_violation_records"
+                    name="product_violation_records"
                 >
                     <div>
                         <div>
@@ -225,7 +240,7 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                 </FormItem>
 
                 <FormItem
-                    label="邮件信息"
+                    label="原始邮件信息"
                     name="source_emails"
                 >
                     <div>
@@ -238,6 +253,13 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                         </div>
                     </div>
                 </FormItem>
+                <FormItem
+                    label="人员误操作记录"
+                    name="misuse_records"
+                >
+
+                </FormItem>
+
             </Form>
 
             {

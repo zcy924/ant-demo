@@ -72,7 +72,7 @@ const routes = [
             "exact": true
           },
           {
-            "name": "空白页面",
+            "name": "GooglePlay Violation",
             "icon": "smile",
             "path": "/gp_violation",
             "component": dynamic({ loader: () => import(/* webpackChunkName: 'p__gp_violation' */'/Users/Tassel/Desktop/Cootek/ant-demo/src/pages/gp_violation'), loading: require('@/components/PageLoading/index').default}),

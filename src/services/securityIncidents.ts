@@ -7,18 +7,18 @@ export interface ParamsType {
 }
 
 export async function querySecurityIncidents(params: ParamsType) {
-    return request.get('/security_incident', {params:params})
+    return request.get('/api/security', {params:params})
 }
 
 export async function addSecurityIncident(params:any) {
-    return request.post('/security_incident', {data:params})
+    return request.post('/api/security', {data:params})
 }
 
 export async function modSecurityIncident(params:any) {
-    return request.put('/security_incident',{data:params})
+    return request.put('/api/security',{data:params})
 }
 
 export async function delSecurityIncident(id:string) {
-    return request.delete(`/security_incident/${id}`)
+    return request.delete(`/api/security/${id}`)
 }
 

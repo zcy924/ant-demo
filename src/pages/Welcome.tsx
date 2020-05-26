@@ -45,6 +45,9 @@ export default (): React.ReactNode => (
         </a>
       </Typography.Text>
       <CodePreview> npm run fetch:blocks</CodePreview>
+        <div>
+            图片
+        </div>
     </Card>
     <p
       style={{

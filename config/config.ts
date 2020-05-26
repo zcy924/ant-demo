@@ -91,7 +91,7 @@ export default defineConfig({
               component: './ListTableList',
             },
             {
-              name: '空白页面',
+              name: 'GooglePlay Violation',
               icon: 'smile',
               path: '/gp_violation',
               component: './gp_violation',
