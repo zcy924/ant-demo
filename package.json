@@ -93,7 +93,7 @@
     "mockjs": "^1.0.1-beta3",
     "prettier": "^2.0.1",
     "pro-download": "1.0.1",
-    "stylelint": "^13.0.0"
+    "stylelint": "^15.10.1"
   },
   "optionalDependencies": {
     "puppeteer": "^2.0.0"
